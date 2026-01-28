@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    @GetMapping("/{id}")
-    public String getUser(@PathVariable Long id) {
-        return "User details for ID: " + id;
+    @GetMapping("/test")
+    public String test() {
+        return "User service working";
     }
 }
+
