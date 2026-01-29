@@ -1,4 +1,4 @@
-package com.ordermanagement.gateway.filter;
+package com.ordermanagement.api_gatewayfilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.ordermanagement.user.controller;
+package com.ordermanagement.userservice.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
