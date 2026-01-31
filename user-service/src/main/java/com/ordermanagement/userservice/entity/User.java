@@ -11,9 +11,10 @@ public class User {
 
     @Column(nullable = false)
     private String username;
-
     private String password;
     private String role;
+    private String email;
+    
 	public Long getId() {
 		return id;
 	}
@@ -38,21 +39,39 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public User(Long id, String username, String password, String role) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.role = role;
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public User(Long id, String username, String password, String role, String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.email = email;
+	}
+	
+	
+	
+	public User(String username, String email) {
+		super();
+		this.username = username;
+		this.email = email;
+	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", email="
+				+ email + "]";
 	}
-    
+	
+	
     
 }

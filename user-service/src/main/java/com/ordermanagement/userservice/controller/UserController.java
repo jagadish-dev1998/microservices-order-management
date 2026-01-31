@@ -2,6 +2,8 @@ package com.ordermanagement.userservice.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ordermanagement.userservice.dto.UserRequestDTO;
+import com.ordermanagement.userservice.dto.UserResponseDto;
 import com.ordermanagement.userservice.entity.User;
 import com.ordermanagement.userservice.service.UserService;
 
@@ -18,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -32,13 +35,21 @@ public class UserController {
 	@Autowired
 	private UserService userService;
     
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-    	 log.info("DEBUG USER OBJECT: {}", user);
-         log.info("USERNAME FIELD: {}", user.getUsername());
-    User saveduser = userService.saveUser(user);
-        return new ResponseEntity<User>(saveduser,HttpStatus.CREATED);
-    }
+// legacy practice	
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody User user) {
+//    	 
+//    User saveduser = userService.saveUser(user);
+//        return new ResponseEntity<User>(saveduser,HttpStatus.CREATED);
+//    }
+	
+//Modern practice	
+	@PostMapping
+	public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDTO dto){
+		
+		UserResponseDto response = userService.createUser(dto);
+		return  ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
     
     @GetMapping
     public ResponseEntity<List<User>>  fetchUsers() {
