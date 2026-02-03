@@ -1,15 +1,17 @@
 package com.ordermanagement.product_service.serviceimpl;
 
-import java.awt.print.Pageable;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.ordermanagement.product_service.dto.ProductRequestDTO;
 import com.ordermanagement.product_service.entity.Product;
 import com.ordermanagement.product_service.repo.ProductRepository;
 import com.ordermanagement.product_service.service.ProductService;
@@ -21,8 +23,14 @@ public class ProductServiceImpl implements ProductService{
 	
 	@Override
 	@Transactional
-	public Product createProduct(Product product) {
-		return productRepository.save(product);
+	public Product createProduct(ProductRequestDTO product) {
+		
+		Product products = new Product();
+	    products.setName(product.getName());
+	    products.setPrice(product.getPrice());
+	    products.setStock(product.getStock());
+
+		return productRepository.save(products);
 	}
 
 	@Override
@@ -43,6 +51,11 @@ public class ProductServiceImpl implements ProductService{
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new RuntimeException("Product not found"));
 		product.setStock(product.getStock() - quantity);
+	}
+
+	@Override
+	public Optional<Product> getProductById(Long id) {
+		return productRepository.findById(id);
 	}
 	
 	
