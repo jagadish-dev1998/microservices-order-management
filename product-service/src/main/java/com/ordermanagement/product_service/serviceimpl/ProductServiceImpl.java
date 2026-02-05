@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.ordermanagement.product_service.dto.ProductRequestDTO;
 import com.ordermanagement.product_service.entity.Product;
+import com.ordermanagement.product_service.exception.InsufficientStockException;
 import com.ordermanagement.product_service.repo.ProductRepository;
 import com.ordermanagement.product_service.service.ProductService;
 
@@ -48,9 +49,15 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	@Transactional
 	public void updateStock(Long productId, int quantity) {
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new RuntimeException("Product not found"));
-		product.setStock(product.getStock() - quantity);
+
+	    Product product = productRepository.findByIdForUpdate(productId)
+	            .orElseThrow();
+
+	    if (product.getStock() < quantity) {
+	        throw new InsufficientStockException("Insufficient stock");
+	    }
+
+	    product.setStock(product.getStock() - quantity);
 	}
 
 	@Override
