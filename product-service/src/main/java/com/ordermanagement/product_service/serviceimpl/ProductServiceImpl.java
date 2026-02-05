@@ -46,23 +46,28 @@ public class ProductServiceImpl implements ProductService{
 		return productRepository.findByNameContainingIgnoreCase(name, pageable);
 	}
 
-	@Override
 	@Transactional
-	public void updateStock(Long productId, int quantity) {
+    public void reduceStock(Long productId, int quantity) {
 
-	    Product product = productRepository.findByIdForUpdate(productId)
-	            .orElseThrow();
+        Product product = productRepository.findByIdForUpdate(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-	    if (product.getStock() < quantity) {
-	        throw new InsufficientStockException("Insufficient stock");
-	    }
+        if (product.getStock() < quantity) {
+            throw new RuntimeException("Insufficient stock");
+        }
 
-	    product.setStock(product.getStock() - quantity);
-	}
+        product.setStock(product.getStock() - quantity);
+    }
 
 	@Override
 	public Optional<Product> getProductById(Long id) {
 		return productRepository.findById(id);
+	}
+
+	@Override
+	public void updateStock(Long productId, int quantity) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
