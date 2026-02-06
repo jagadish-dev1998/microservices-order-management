@@ -11,6 +11,10 @@ import com.ordermanagement.orderservice.entity.Order.OrderStatus;
 import com.ordermanagement.orderservice.repo.OrderRepository;
 import com.ordermanagement.orderservice.service.OrderService;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
@@ -24,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order placeOrder(Long userId, BigDecimal totalAmount) {
 
+    	//log.info("Placing order for userId={}", userId);
         Order order = new Order();
         order.setUserId(userId);
         order.setTotalAmount(totalAmount);
