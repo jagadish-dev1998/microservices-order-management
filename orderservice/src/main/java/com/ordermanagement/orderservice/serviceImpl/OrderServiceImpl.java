@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ordermanagement.orderservice.entity.Order;
 import com.ordermanagement.orderservice.entity.Order.OrderStatus;
+import com.ordermanagement.orderservice.event.OrderEvent;
+import com.ordermanagement.orderservice.kafka.OrderProducer;
 import com.ordermanagement.orderservice.repo.OrderRepository;
 import com.ordermanagement.orderservice.service.OrderService;
 
@@ -25,6 +28,9 @@ public class OrderServiceImpl implements OrderService {
         this.orderRepository = orderRepository;
     }
 
+    @Autowired
+    private OrderProducer orderProducer;
+    
     @Override
     public Order placeOrder(Long userId, BigDecimal totalAmount) {
 
@@ -33,8 +39,18 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(userId);
         order.setTotalAmount(totalAmount);
         order.setStatus(OrderStatus.CREATED);
+        
+        Order savedOrder = orderRepository.save(order);
+        
+        OrderEvent event = new OrderEvent(
+        		savedOrder.getId(), 
+        		savedOrder.getUserId(),
+        		savedOrder.getTotalAmount()
+        );
 
-        return orderRepository.save(order);
+        orderProducer.sendOrderEvent(event);
+        
+        return savedOrder;
     }
 
     @Override
